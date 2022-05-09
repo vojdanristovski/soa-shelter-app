@@ -9,6 +9,6 @@ class Settings(BaseSettings):
 
 
 @lru_cache()
-def get_config() -> Config:
-    return Config()
+def get_config() -> Settings:
+    return Settings()
 

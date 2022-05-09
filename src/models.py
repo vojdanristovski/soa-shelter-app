@@ -3,7 +3,7 @@ from sqlalchemy import String,Boolean,Integer,Column
 from .enums import DogBreed,DogStatus
 from sqlalchemy.dialects.postgresql import ENUM
 class Dog(Base):
-    __table__name="dogs"
+    __tablename__="dogs"
     id=Column(Integer,primary_key=True)
 
     image_url=Column(String(255),nullable=True)
