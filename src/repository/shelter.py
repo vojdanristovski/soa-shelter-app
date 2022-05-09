@@ -2,7 +2,7 @@ from select import select
 from sqlalchemy.orm import scoped_session
 from src.enums import DogStatus
 
-from src.models import Dog
+from src.models import dog as Dog
 from sqlalchemy.sql.expression import select, update
 
 class ShelterRepository:

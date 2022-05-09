@@ -15,7 +15,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./src:/code/src 
+      - .:/code 
     depends_on:
       - db
     environment:
