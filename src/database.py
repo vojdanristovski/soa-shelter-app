@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,scoped_session
 from .config import get_config
 
-engine=create_engine(get_config().database_url)
+engine=create_engine("postgresql://shelter-app:shelter-app@db:5432/shelter-app")
 
 Base=declarative_base()
 

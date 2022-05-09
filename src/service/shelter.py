@@ -1,4 +1,5 @@
 
+from typing import List, Optional
 from fastapi import Depends, HTTPException, status
 from src.enums import DogStatus
 
@@ -27,9 +28,25 @@ class ShelterService:
         except DatabaseError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="There was an error updating a reason",
+                detail="There was an error changing dog status",
             )
 
+    def list_dogs_by_status(self,dog_status: Optional[DogStatus])->List[ReadDogSchema]:
+        if dog_status is None:
+            dog_status=[]
+        try:
+            with ScopedSession() as active_session:
+                with active_session.begin():
+                    dogs=self.repository.list_dogs_by_status(
+                        dog_status,session=active_session
+                    )
+                    content = [self._return_schema.from_orm(dog) for dog in dogs]
+                    return content
 
+        except DatabaseError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="There was an error fetching dogs",
+            )
 def get_sheler_service(shelter_repository: ShelterRepository = Depends(get_shelter_repository)):
     return ShelterService(shelter_repository=shelter_repository)

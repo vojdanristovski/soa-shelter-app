@@ -18,5 +18,17 @@ class ShelterRepository:
         return entry
 
 
+    def list_dogs_by_status(self, dog_status : DogStatus, session:scoped_session) -> any:
+
+        statement = (
+            select(Dog)
+            .where(Dog.dog_status == dog_status)
+        )
+
+        entries = session.execute(statement).unique().scalars().all()
+
+        return entries
+
+
 def get_shelter_repository():
     return ShelterRepository()
