@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy import asc
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,12 +9,18 @@ from src.enums import DogStatus
 
 
 class ShelterRepository:
+    async def find_one(self, id_: int, session: AsyncSession) -> Optional[Dog]:
+        statement = (select(Dog).where(Dog.id_ == id_))
+        result = await session.execute(statement)
+        return result.scalars().first()
+
     async def change_dog_status(
         self, dog_id: str, dog_status: DogStatus, session: AsyncSession
     ) -> Dog:
-        statement = update(Dog).values(dog_status=dog_status).where(Dog.id == dog_id)
-        result = await session.execute(statement)
-        return result.unique().scallars().first()
+        statement = update(Dog).values(
+            dog_status=dog_status).where(Dog.id_ == dog_id)
+        await session.execute(statement)
+        return await self.find_one(dog_id, session)
 
     async def list_dogs_by_status(
         self, dog_status: DogStatus, session: AsyncSession

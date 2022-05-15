@@ -1,7 +1,8 @@
 from typing import List, Optional
 from fastapi import Depends, HTTPException, status
 from src.enums import DogStatus
-
+from pydantic import EmailStr
+from src import integration
 from src.repository.shelter import ShelterRepository, get_shelter_repository
 from src.schemas import ReadDogSchema, CreateDogSchema
 from src.models.dog import Dog
@@ -55,12 +56,25 @@ class ShelterService:
             )
 
     async def create_dog(self, dog: CreateDogSchema) -> ReadDogSchema:
+        is_available = await integration.inventory_service_has_available_space()
+        if not is_available:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No room for sheltering",
+            )
+
         try:
             entity = Dog(**dog.dict(exclude_unset=True), dog_status=DogStatus.WAITING)
             async with ScopedSession() as active_session:
                 async with active_session.begin():
                     persisted = await self.repository.insert_one(
                         entity, session=active_session
+                    )
+                    # TODO(team sync) decide where to read email data from 
+                    await integration.notification_service_email_user(
+                        email=EmailStr("kate@dekan.com"),
+                        body="Kate's dog was succesfully put on the waiting list",
+                        subject="Your dog sheltering request"
                     )
                     return ReadDogSchema.from_orm(persisted)
 

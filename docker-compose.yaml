@@ -15,8 +15,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/code 
+      - .:/code
     depends_on:
       - db
     environment:
       - DATABASE_URL=postgresql+asyncpg://shelter-app:shelter-app@db:5432/shelter-app
+      - DEBUG=True
+      - INVENTORY_SERVICE_URL=http://changeme:8001
+      - NOTIFICATION_SERVICE_URL=http://changeme:8002
