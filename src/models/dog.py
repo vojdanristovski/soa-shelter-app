@@ -1,5 +1,5 @@
 from sqlalchemy import String, Boolean, Integer, Column
-from ..enums import DogBreed, DogStatus
+from src.enums import DogBreed, DogStatus
 from sqlalchemy.dialects.postgresql import ENUM
 from src.models.base import BaseDbModel, Base
 

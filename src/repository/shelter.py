@@ -3,7 +3,7 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import select, update
 
-from src.models import Dog
+from src.models.dog import Dog
 from src.enums import DogStatus
 
 
