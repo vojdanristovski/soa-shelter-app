@@ -22,7 +22,7 @@ class ShelterRepository:
         result = await session.execute(statement)
         return result.unique().scalars().all()
 
-    async def create_dog(self, dog: Dog, session: AsyncSession) -> Dog:
+    async def insert_one(self, dog: Dog, session: AsyncSession) -> Dog:
         session.add(dog)
         await session.flush()
         await session.refresh(dog)

@@ -7,7 +7,7 @@ Base = declarative_base()
 
 @declarative_mixin
 class BaseDbModel:
-    id_ = Column("id", Integer, primary_key=True)
+    id_ = Column("id", Integer, primary_key=True, autoincrement=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

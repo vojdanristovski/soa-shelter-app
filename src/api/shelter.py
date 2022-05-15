@@ -34,4 +34,4 @@ async def change_dog_status(
 async def place_dog_for_adoption(
     dog: CreateDogSchema, shelter_service: ShelterService = Depends(get_shelter_service)
 ):
-    return await shelter_service.create_dog_adoption(dog)
+    return await shelter_service.create_dog(dog)

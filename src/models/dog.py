@@ -5,8 +5,8 @@ from src.models.base import BaseDbModel, Base
 
 
 class Dog(BaseDbModel, Base):
-    image_url = Column(String(255), nullable=True)
     name = Column(String(255), nullable=False)
+    image_url = Column(String(255), nullable=True)
     is_chipped = Column(Boolean, default=False)
     coordinates = Column(String(255), nullable=True)
     breed = Column(ENUM(DogBreed, name="breeds"), name="breed", nullable=False)
