@@ -1,6 +1,5 @@
 from fastapi import APIRouter
-from src.api import shelter 
-
+from src.api import shelter
 
 
 router = APIRouter()

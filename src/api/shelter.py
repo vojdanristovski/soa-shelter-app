@@ -1,12 +1,10 @@
-
-
 from typing import Optional
 from fastapi import APIRouter, Depends, Query
 
-from src.schemas import ReadDogSchema
+from src.schemas import ReadDogSchema, CreateDogSchema
 
 from src.enums import DogStatus
-from src.service.shelter import ShelterService, get_sheler_service
+from src.service.shelter import ShelterService, get_shelter_service
 
 
 router = APIRouter(prefix="/shelter", tags=["Shelter"])
@@ -16,9 +14,24 @@ router = APIRouter(prefix="/shelter", tags=["Shelter"])
 # def adopt_dog(dog_id: str):
 #     return ...
 @router.get("/list_dogs_by_status")
-async def list_dogs_by_status(status:Optional[DogStatus]=Query(None),shelter_service: ShelterService = Depends(get_sheler_service)):
+async def list_dogs_by_status(
+    status: Optional[DogStatus] = Query(None),
+    shelter_service: ShelterService = Depends(get_shelter_service),
+):
     return shelter_service.list_dogs_by_status(status)
 
+
 @router.post("/change_dog_status/{dog_id}", response_model=ReadDogSchema)
-async def change_dog_status(dog_id: str, status: DogStatus, shelter_service: ShelterService = Depends(get_sheler_service)):
+async def change_dog_status(
+    dog_id: str,
+    status: DogStatus,
+    shelter_service: ShelterService = Depends(get_shelter_service),
+):
     return shelter_service.change_dog_status(dog_id, status)
+
+
+@router.post("/place-dog-for-adoption", response_model=ReadDogSchema)
+async def place_dog_for_adoption(
+    dog: CreateDogSchema, shelter_service: ShelterService = Depends(get_shelter_service)
+):
+    return await shelter_service.create_dog_adoption(dog)
