@@ -70,6 +70,21 @@ class ShelterService:
                 detail="There was an error creating a dog",
             )
 
+    async def get_next_dog_to_shelter(self) -> ReadDogSchema:
+        try:
+            async with ScopedSession() as active_session:
+                async with active_session.begin():
+                    persisted = await self.repository.find_next_to_shelter(
+                        session=active_session
+                    )
+                    return ReadDogSchema.from_orm(persisted)
+
+        except DatabaseError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="There was an error finding a dog",
+            )
+
 
 def get_shelter_service(
     shelter_repository: ShelterRepository = Depends(get_shelter_repository),

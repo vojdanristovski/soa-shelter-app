@@ -35,3 +35,10 @@ async def place_dog_for_adoption(
     dog: CreateDogSchema, shelter_service: ShelterService = Depends(get_shelter_service)
 ):
     return await shelter_service.create_dog(dog)
+
+
+@router.get("/choose-next-dog-to-shelter", response_model=ReadDogSchema)
+async def choose_next_dog_to_shelter(
+    shelter_service: ShelterService = Depends(get_shelter_service),
+):
+    return await shelter_service.get_next_dog_to_shelter()
