@@ -1,34 +1,35 @@
-from select import select
+from typing import List
 from sqlalchemy.orm import scoped_session
-from src.enums import DogStatus
-
-from src.models import dog as Dog
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import select, update
 
-class ShelterRepository:
+from src.models import Dog
+from src.enums import DogStatus
 
-    def change_dog_status(self, dog_id : str, dog_status : DogStatus, session:scoped_session) -> any:
-        
+class ShelterRepository:
+    async def change_dog_status(self, dog_id : str, dog_status : DogStatus, session: AsyncSession) -> Dog:
         statement = (
             update(Dog)
             .values(dog_status = dog_status)
             .where(Dog.id == dog_id)
         )
-        entry = session.execute(statement).unique().scallars().first()
-        return entry
+        result = await session.execute(statement)
+        return result.unique().scallars().first()
 
 
-    def list_dogs_by_status(self, dog_status : DogStatus, session:scoped_session) -> any:
-
+    async def list_dogs_by_status(self, dog_status : DogStatus, session: AsyncSession) -> List[Dog]:
         statement = (
             select(Dog)
             .where(Dog.dog_status == dog_status)
         )
+        result = await session.execute(statement)
+        return result.unique().scalars().all()
 
-        entries = session.execute(statement).unique().scalars().all()
-
-        return entries
-
+    async def create_dog(self, dog: Dog, session: AsyncSession) -> Dog:
+        session.add(dog)
+        await session.flush()
+        await session.refresh(dog)
+        return dog
 
 def get_shelter_repository():
     return ShelterRepository()
