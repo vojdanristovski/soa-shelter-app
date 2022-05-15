@@ -10,15 +10,14 @@ from src.enums import DogStatus
 
 class ShelterRepository:
     async def find_one(self, id_: int, session: AsyncSession) -> Optional[Dog]:
-        statement = (select(Dog).where(Dog.id_ == id_))
+        statement = select(Dog).where(Dog.id_ == id_)
         result = await session.execute(statement)
         return result.scalars().first()
 
     async def change_dog_status(
         self, dog_id: str, dog_status: DogStatus, session: AsyncSession
     ) -> Dog:
-        statement = update(Dog).values(
-            dog_status=dog_status).where(Dog.id_ == dog_id)
+        statement = update(Dog).values(dog_status=dog_status).where(Dog.id_ == dog_id)
         await session.execute(statement)
         return await self.find_one(dog_id, session)
 

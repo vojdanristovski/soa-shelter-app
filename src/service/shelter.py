@@ -70,11 +70,11 @@ class ShelterService:
                     persisted = await self.repository.insert_one(
                         entity, session=active_session
                     )
-                    # TODO(team sync) decide where to read email data from 
+                    # TODO(team sync) decide where to read email data from
                     await integration.notification_service_email_user(
                         email=EmailStr("kate@dekan.com"),
                         body="Kate's dog was succesfully put on the waiting list",
-                        subject="Your dog sheltering request"
+                        subject="Your dog sheltering request",
                     )
                     return ReadDogSchema.from_orm(persisted)
 
