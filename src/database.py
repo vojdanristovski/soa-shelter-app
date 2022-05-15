@@ -1,5 +1,3 @@
-from typing import Generator
-
 from src.settings import Settings, get_settings
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
