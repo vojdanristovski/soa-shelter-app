@@ -9,6 +9,11 @@ class DogStatus(enum.IntEnum):
     RESCUED = 4
 
 
+class LostDogReportStatus(enum.IntEnum):
+    OPENED = 0
+    CLOSED = 1
+
+
 class DogBreed(enum.Enum):
     MALTESE = "maltese"
     CORGI = "corgi"

@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field, BaseConfig
-from src.enums import DogBreed, DogStatus
+from src.enums import DogBreed, DogStatus, LostDogReportStatus
 from datetime import datetime
 
 
@@ -31,3 +31,22 @@ class CreateDogSchema(BaseModel):
     is_chipped: Optional[bool]
     coordinates: Optional[str]
     breed: DogBreed
+
+
+class ReadLostDogReportSchema(BaseDbSchema):
+    user_name: str
+    dog_name: str
+    is_chipped: Optional[bool]
+    last_known_location: str
+    image_url: str
+    phone_number: str
+    report_status: LostDogReportStatus
+
+
+class CreateLostDogReportSchema(BaseModel):
+    user_name: str
+    dog_name: str
+    is_chipped: Optional[bool]
+    last_known_location: str
+    image_url: str
+    phone_number: str
